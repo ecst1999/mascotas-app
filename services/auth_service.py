@@ -15,8 +15,8 @@ class AuthService():
     
     def login(self, usuario: UsuarioLogin):
         user = self.db.query(UsuarioModel).filter(UsuarioModel.usr_username == usuario.dict()['usr_username']).first()
-        clave = user.check_password(usuario.dict()['usr_password'])
         if user:
+            clave = user.check_password(usuario.dict()['usr_password'])
             if user and clave:
                 return "LOGIN"
         return "El usuario o contraseña son incorrectos."

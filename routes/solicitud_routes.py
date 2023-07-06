@@ -6,7 +6,7 @@ from fastapi.encoders import jsonable_encoder
 
 solicitud_router = APIRouter()
 
-@solicitud_router.get('/solicitudes')
+@solicitud_router.get('/solicitudes', tags=['solicitudes'])
 def get_roles():
     db = Session()
     result = SolicitudService(db).get_solicitudes()
