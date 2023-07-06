@@ -1,8 +1,7 @@
-from fastapi import Path, APIRouter
+from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from models.mascota import Mascota
 from config.database import Session
-from services.mascota import MascotaService
+from services.mascota_service import MascotaService
 from fastapi.encoders import jsonable_encoder
 
 mascota_router = APIRouter()

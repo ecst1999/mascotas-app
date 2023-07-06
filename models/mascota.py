@@ -1,11 +1,17 @@
 from config.database import Base
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 
 class Mascota(Base):
 
     __tablename__ = "mascotas"
 
-    id = Column(Integer, primary_key=True)
-    nombre = Column(String(100))
-    especie = Column(String(100))
-    edad = Column(Integer)
+    pet_id = Column(Integer, primary_key=True, autoincrement=True)
+    pet_nombre = Column(String(100))
+    pet_especie = Column(String(100))
+    pet_edad = Column(Integer)    
+
+    per_id = Column(Integer, ForeignKey("personas.per_id"))
+
+    # galerias = relationship("Galeria" ,back_populates="mascotas")
+    # persona = relationship("Persona", back_populates="mascotas")
