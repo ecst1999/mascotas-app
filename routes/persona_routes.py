@@ -13,6 +13,15 @@ def get_personas():
     result = PersonaService(db).get_personas()
     return JSONResponse(status_code= 200, content= jsonable_encoder(result))
 
+@persona_router.get('/persona/{id}', tags=['personas'])
+def get_persona(id:int):
+    db = Session()
+    result = PersonaService(db).get_persona(id)
+    if not result:
+        return JSONResponse(status_code=404, content={"msg": "No encontrado"})
+    
+    return JSONResponse(status_code= 200, content= jsonable_encoder(result))
+
 
 @persona_router.post('/personas', tags=['personas'], response_model=dict, status_code=201)
 def add_persona(persona: Persona):
