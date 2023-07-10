@@ -7,7 +7,7 @@ class PersonaService():
         self.db = db
 
     def get_personas(self):
-        return self.db.query(PersonaModel).all()    
+        return self.db.query(PersonaModel).filter(PersonaModel.per_estado == True).all()    
     
     def add_personas(self, persona: Persona):
         new_persona = PersonaModel(**persona.dict())
@@ -16,10 +16,10 @@ class PersonaService():
         return
     
     def get_persona(self, id):
-        return self.db.query(PersonaModel).filter(PersonaModel.per_id == id).first()
+        return self.db.query(PersonaModel).filter(PersonaModel.per_id == id, PersonaModel.per_estado == True).first()
     
     def update_persona(self, id: int, data: Persona):
-        persona = self.db.query(PersonaModel).filter(PersonaModel.per_id == id).first()        
+        persona = self.db.query(PersonaModel).filter(PersonaModel.per_id == id, PersonaModel.per_estado == True).first()        
         
         persona.per_nombre = data.per_nombre
         persona.per_apellido = data.per_apellido
@@ -31,6 +31,7 @@ class PersonaService():
         return
     
     def delete_persona(self, id:int):
-        self.db.query(PersonaModel).filter(PersonaModel.per_id == id).delete()
+        persona = self.db.query(PersonaModel).filter(PersonaModel.per_id == id).first()
+        persona.per_estado = False
         self.db.commit()
         return

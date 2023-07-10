@@ -7,7 +7,7 @@ from fastapi.encoders import jsonable_encoder
 
 persona_router = APIRouter()
 
-@persona_router.get('/personas')
+@persona_router.get('/personas', tags=['personas'])
 def get_personas():
     db = Session()
     result = PersonaService(db).get_personas()

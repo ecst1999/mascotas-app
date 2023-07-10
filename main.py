@@ -6,6 +6,8 @@ from routes.solicitud_routes import solicitud_router
 from routes.usuario_routes import usuario_router
 from routes.auth_routes import auth_router
 from config.database import engine, Base
+from config.setters import RoleSetter
+from config.database import Session
 
 app = FastAPI()
 app.title = 'Backend de app mascotas'
@@ -19,3 +21,9 @@ app.include_router(usuario_router)
 app.include_router(auth_router)
 
 Base.metadata.create_all(bind=engine)
+
+# @app.on_event("startup")
+# async def startup_event():
+#     db = Session()
+#     RoleSetter(db).set_roles()
+

@@ -7,7 +7,7 @@ from fastapi.encoders import jsonable_encoder
 
 galeria_router = APIRouter()
 
-@galeria_router.get('/galerias')
+@galeria_router.get('/galerias', tags=['galerias'])
 def get_galerias():
     db = Session()
     result = GaleriaService(db).get_galerias()
