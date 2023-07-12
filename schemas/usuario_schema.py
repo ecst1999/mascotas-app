@@ -20,14 +20,14 @@ class Usuario(BaseModel):
 
 class UsuarioLogin(BaseModel):
 
-    usr_username: str = Field(max_length=50)
-    usr_password: str = Field(max_length=50)
+    username: str = Field(max_length=50)
+    password: str = Field(max_length=50)
 
 
     class Config:
         schema_extra = {
             "example": {                                
-                "usr_username": "username",
-                "usr_password": "123456",             
+                "username": "username",
+                "password": "123456",             
             }
         }

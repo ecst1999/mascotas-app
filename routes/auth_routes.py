@@ -7,7 +7,7 @@ from fastapi.encoders import jsonable_encoder
 
 auth_router = APIRouter()
 
-@auth_router.post('/auth/register', tags=['auth'], response_model=dict, status_code=201)
+@auth_router.post('/register', tags=['auth'], response_model=dict, status_code=201)
 def register(usuario: Usuario):
     if not password_equals(usuario.dict()["repeat_password"], usuario.dict()["usr_password"]):
         return JSONResponse(status_code=404, content={"message": "La contraseñas no coinciden"})        
@@ -21,7 +21,7 @@ def password_equals(password, repeat_password)-> bool:
         return True
     return False
 
-@auth_router.post('/auth/login', tags=['auth'], status_code=200)
+@auth_router.post('/login', tags=['auth'], status_code=200)
 def login(usuario: UsuarioLogin):    
     db = Session()
     valor = AuthService(db).login(usuario)

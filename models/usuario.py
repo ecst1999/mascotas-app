@@ -1,6 +1,6 @@
 from config.database import Base
-from sqlalchemy import Column, Integer, String, ForeignKey, Text
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, ForeignKey, Text, Boolean
+from sqlalchemy.orm import relationship, deferred
 from werkzeug.security import generate_password_hash, check_password_hash
 from models.role import Role
 
@@ -10,7 +10,8 @@ class Usuario(Base):
 
     usr_id = Column(Integer, primary_key=True, autoincrement=True)
     usr_username = Column(String(50), unique=True, nullable=False)
-    usr_password = Column(Text)
+    usr_password = deferred(Column(Text))
+    usr_estado = Column(Boolean, default=True)
 
     per_id = Column(Integer, ForeignKey("personas.per_id"))
     rol_id = Column(Integer, ForeignKey("roles.rol_id"), default=2)

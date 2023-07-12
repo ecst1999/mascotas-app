@@ -6,6 +6,9 @@ from routes.solicitud_routes import solicitud_router
 from routes.usuario_routes import usuario_router
 from routes.auth_routes import auth_router
 from config.database import engine, Base
+from config.setters import RoleSetter
+from config.database import Session
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 app.title = 'Backend de app mascotas'
@@ -17,5 +20,12 @@ app.include_router(persona_router)
 app.include_router(solicitud_router)
 app.include_router(usuario_router)
 app.include_router(auth_router)
+app.mount("/storage", StaticFiles(directory="storage"), name="storage")
 
 Base.metadata.create_all(bind=engine)
+
+# @app.on_event("startup")
+# async def startup_event():
+#     db = Session()
+#     RoleSetter(db).set_roles()
+

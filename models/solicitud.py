@@ -9,7 +9,7 @@ class Solicitud(Base):
 
     sol_id = Column(Integer, primary_key=True, autoincrement=True)
     sol_fecha = Column(DateTime, default=datetime.datetime.utcnow)
-    sol_descricion = Column(Text)
+    sol_descripcion = Column(Text)
     sol_estado = Column(String(50))
 
     per_id = Column(Integer, ForeignKey("personas.per_id"))

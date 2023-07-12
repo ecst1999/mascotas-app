@@ -1,20 +1,27 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from config.database import Session
 from schemas.persona_schema import Persona
 from services.persona_service import PersonaService
 from fastapi.encoders import jsonable_encoder
+from helpers.jwt import validate_token, reuseable_oauth
 
 persona_router = APIRouter()
 
-@persona_router.get('/personas')
-def get_personas():
+@persona_router.get('/personas', tags=['personas'])
+def get_personas(token: str = Depends(reuseable_oauth)):
+    payload = validate_token(token)
+    if not payload:
+        return JSONResponse(status_code=500, content={"msg": "El token no es valido, por favor inicie sesión"})
     db = Session()
     result = PersonaService(db).get_personas()
     return JSONResponse(status_code= 200, content= jsonable_encoder(result))
 
 @persona_router.get('/persona/{id}', tags=['personas'])
-def get_persona(id:int):
+def get_persona(id:int, token: str = Depends(reuseable_oauth)):
+    payload = validate_token(token)
+    if not payload:
+        return JSONResponse(status_code=500, content={"msg": "El token no es valido, por favor inicie sesión"})
     db = Session()
     result = PersonaService(db).get_persona(id)
     if not result:
@@ -22,25 +29,24 @@ def get_persona(id:int):
     
     return JSONResponse(status_code= 200, content= jsonable_encoder(result))
 
-
-@persona_router.post('/personas', tags=['personas'], response_model=dict, status_code=201)
-def add_persona(persona: Persona):
-    db = Session()
-    PersonaService(db).add_personas(persona)
-    return JSONResponse(status_code=201, content={"message": "Se registro la persona de forma adecuada"})
-
 @persona_router.put('/persona/{id}', tags=['personas'])
-def update_persona(id: int, persona: Persona):
+def update_persona(id: int, persona: Persona, token: str = Depends(reuseable_oauth)):
+    payload = validate_token(token)
+    if not payload:
+        return JSONResponse(status_code=500, content={"msg": "El token no es valido, por favor inicie sesión"})
     db = Session()
     result = PersonaService(db).get_persona(id)
     if not result:
         return JSONResponse(status_code=404, content={"msg": "No encontrado"})
-    PersonaService(db).update_persona(id, persona)
+    PersonaService(db).update_persona(id, persona, payload['per'])
 
     return JSONResponse(status_code=200, content={"message": "Se ha modificado el campo de persona"})
 
 @persona_router.delete('/persona/{id}', tags=['personas'])
-def delete_persona(id: int):
+def delete_persona(id: int, token: str = Depends(reuseable_oauth)):
+    payload = validate_token(token)
+    if not payload:
+        return JSONResponse(status_code=500, content={"msg": "El token no es valido, por favor inicie sesión"})
     db = Session()
     result = PersonaService(db).get_persona(id)
     if not result:
