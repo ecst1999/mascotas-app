@@ -1,4 +1,5 @@
 from models.usuario import Usuario as UsuarioModel
+from models.persona import Persona as PersonaModel
 from schemas.usuario_schema import Usuario, UsuarioLogin
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
@@ -12,7 +13,12 @@ class AuthService():
         self.db = db    
 
     def register(self, usuario: Usuario):
-        new_usuario = UsuarioModel().save_user(usuario.dict())
+        new_persona = PersonaModel(per_identificacion = usuario.dict()['identificacion'])
+        self.db.add(new_persona)
+        self.db.commit()
+
+        new_usuario = UsuarioModel().save_user(usuario.dict(), new_persona.per_id)
+
         self.db.add(new_usuario)
         self.db.commit()
         return usuario.dict()

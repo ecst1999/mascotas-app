@@ -25,9 +25,9 @@ class Usuario(Base):
     def check_password(self, password):
         return check_password_hash(self.usr_password, password)
     
-    def save_user(self, usuario: dict):
+    def save_user(self, usuario: dict, persona: int):
         self.usr_username = usuario['usr_username']
         self.set_password(usuario['usr_password'])
-        self.per_id = usuario['per_id']
+        self.per_id = persona
 
         return self

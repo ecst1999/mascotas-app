@@ -6,7 +6,7 @@ class Usuario(BaseModel):
     usr_username: str = Field(max_length=50)
     usr_password: str = Field(max_length=50)
     repeat_password: str = Field(max_length=50)
-    per_id: int = Field()    
+    identificacion: str = Field(max_length=15)    
 
     class Config:
         schema_extra = {
@@ -14,7 +14,7 @@ class Usuario(BaseModel):
                 "usr_username": "username",
                 "usr_password": "123456",
                 "repeat_password": "123456",
-                "per_id": 0,                
+                "identificacion": "1234567890",                
             }
         }
 
