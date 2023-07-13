@@ -22,8 +22,8 @@ app.mount("/storage", StaticFiles(directory="storage"), name="storage")
 
 Base.metadata.create_all(bind=engine)
 
-@app.on_event("startup")
-async def startup_event():
-    db = Session()
-    RoleSetter(db).set_roles()
+# @app.on_event("startup")
+# async def startup_event():
+#     db = Session()
+#     RoleSetter(db).set_roles()
 
