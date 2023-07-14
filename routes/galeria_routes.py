@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, Depends
+from fastapi import APIRouter, UploadFile, File, Depends, Form
 from fastapi.responses import JSONResponse
 from services.galeria_service import GaleriaService
 from services.galeria_service import Galeria
@@ -24,7 +24,7 @@ def get_galerias(token: str = Depends(reuseable_oauth)):
 
 
 @galeria_router.post('/galeria', tags=['galerias'])
-def add_galerias(pet: int, token: str = Depends(reuseable_oauth), galeriaImagen: UploadFile = File(...)):    
+def add_galerias(pet: int = Form(), token: str = Depends(reuseable_oauth), galeriaImagen: UploadFile = File(...)):    
     payload = validate_token(token)
     if not payload:
         return JSONResponse(status_code=500, content={"msg": "El token no es valido, por favor inicie sesión"})
