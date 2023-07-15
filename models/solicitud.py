@@ -13,6 +13,6 @@ class Solicitud(Base):
     sol_estado = Column(String(50))
 
     per_id = Column(Integer, ForeignKey("personas.per_id"))
-    pet_id = Column(Integer, ForeignKey("mascotas.per_id"))
+    pet_id = Column(Integer, ForeignKey("mascotas.pet_id"))
     # persona = relationship("Persona", back_populates="solicitudes")
     mascotas = relationship("Mascota", back_populates="solicitudes")
