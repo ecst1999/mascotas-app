@@ -29,7 +29,7 @@ class AuthService():
             clave = user.check_password(usuario.dict()['password'])
             if user and clave:
                 access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)                
-                access_token = create_token(data={'user': user.usr_username, 'per': user.per_id, 'is_activated': user.personas.per_esta_activo}, expires_delta=access_token_expires)
+                access_token = create_token(data={'user': user.usr_username, 'per': user.per_id, 'is_activated': user.personas.per_esta_activo, 'lleno_formulario': user.personas.per_completo }, expires_delta=access_token_expires)
                 return access_token
 
         return {"msg": "El usuario o contraseña son incorrectos."}

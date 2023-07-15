@@ -16,6 +16,7 @@ class Persona(Base):
     per_foto_documento = Column(Text, nullable=True)
     per_esta_activo = Column(Boolean, default=False)
     per_estado = Column(Boolean, default=True)
+    per_completo = Column(Boolean, default=False)
 
     # solicitudes = relationship("Solicitud", back_populates="personas")
     mascotas = relationship("Mascota", back_populates="personas")

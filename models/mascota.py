@@ -17,3 +17,4 @@ class Mascota(Base):
 
     galerias = relationship("Galeria" ,back_populates="mascotas")
     personas = relationship("Persona", back_populates="mascotas")
+    solicitudes = relationship("Solicitud", back_populates="mascotas")

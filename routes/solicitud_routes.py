@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from config.database import Session
 from services.solicitud_service import SolicitudService
+from services.mascota_service import MascotaService
 from schemas.solicitud_schema import Solicitud
 from fastapi.encoders import jsonable_encoder
 from helpers.jwt import validate_token, reuseable_oauth
@@ -16,6 +17,20 @@ def get_solicitudes(token: str = Depends(reuseable_oauth)):
     db = Session()
     result = SolicitudService(db).get_solicitudes(payload['per'])
     return JSONResponse(status_code= 200, content= jsonable_encoder(result))
+
+@solicitud_router.get('/solicitudes-p', tags=['solicitudes'])
+def get_solicitudes_mascotas(token: str = Depends(reuseable_oauth)):
+    payload = validate_token(token)
+    if not payload:
+        return JSONResponse(status_code=500, content={"msg": "El token no es valido, por favor inicie sesión"})
+    db = Session()
+    mascotas_personas = MascotaService(db).get_mascotas_personas(payload['per'])    
+    if not mascotas_personas:
+        return JSONResponse(status_code=404, content={"msg": "No se encontraron mascotas"})
+    result = []
+    for mascota in mascotas_personas:
+        result.append(SolicitudService(db).get_solicitudes_mascotas(mascota.pet_id)) 
+    return JSONResponse(status_code= 200, content= jsonable_encoder(result[0]))
 
 @solicitud_router.post('/solicitudes', tags=['solicitudes'])
 def add_solicitud(solicitud: Solicitud, token: str = Depends(reuseable_oauth)):

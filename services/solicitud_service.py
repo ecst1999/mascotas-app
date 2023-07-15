@@ -15,6 +15,10 @@ class SolicitudService():
         self.db.commit()
         return
     
+    def get_solicitudes_mascotas(self, pet: int):
+        result = self.db.query(SolicitudModel).filter(SolicitudModel.pet_id == pet).all()
+        return result
+    
     def get_solicitud(self, id: int, persona: int):
         return self.db.query(SolicitudModel).filter(SolicitudModel.sol_id == id, SolicitudModel.per_id == persona).first()
     

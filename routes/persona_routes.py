@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, UploadFile, File, Form
+import shutil
 from fastapi.responses import JSONResponse
 from config.database import Session
-from schemas.persona_schema import Persona
 from services.persona_service import PersonaService
 from fastapi.encoders import jsonable_encoder
 from helpers.jwt import validate_token, reuseable_oauth
@@ -29,16 +29,34 @@ def get_persona(id:int, token: str = Depends(reuseable_oauth)):
     
     return JSONResponse(status_code= 200, content= jsonable_encoder(result))
 
-@persona_router.put('/persona/{id}', tags=['personas'])
-def update_persona(id: int, persona: Persona, token: str = Depends(reuseable_oauth)):
+@persona_router.put('/persona', tags=['personas'])
+def update_persona(nombre: str = Form(), apellido: str = Form(), telefono: str = Form(), correo: str = Form(), direccion: str = Form(), foto_documento: UploadFile = File(...), token: str = Depends(reuseable_oauth)):
     payload = validate_token(token)
     if not payload:
         return JSONResponse(status_code=500, content={"msg": "El token no es valido, por favor inicie sesión"})
+    
+    pathGuardar = f"storage/documentos/{foto_documento.filename}"
+
+    try:
+        with open(pathGuardar, "wb") as buffer:
+            shutil.copyfileobj(foto_documento.file, buffer)
+    finally:
+        foto_documento.file.close()
+
+    persona = {
+        'per_nombre': nombre,
+        'per_apellido': apellido,
+        'per_telefono': telefono,
+        'per_correo': correo,
+        'per_direccion': direccion,
+        'per_foto_documento': pathGuardar
+        }        
+
     db = Session()
-    result = PersonaService(db).get_persona(id)
+    result = PersonaService(db).get_persona(payload['per'])
     if not result:
         return JSONResponse(status_code=404, content={"msg": "No encontrado"})
-    PersonaService(db).update_persona(id, persona, payload['per'])
+    PersonaService(db).update_persona(persona, payload['per'])
 
     return JSONResponse(status_code=200, content={"message": "Se ha modificado el campo de persona"})
 

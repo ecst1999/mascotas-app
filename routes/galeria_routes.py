@@ -7,7 +7,6 @@ from helpers.jwt import validate_token, reuseable_oauth
 
 
 import shutil
-from pathlib import Path
 
 from fastapi.encoders import jsonable_encoder
 
