@@ -31,3 +31,9 @@ class PersonaService():
         persona.per_estado = False
         self.db.commit()
         return
+
+    def activar_cuenta(self, id:int):
+        persona = self.db.query(PersonaModel).filter(PersonaModel.per_id == id).first()
+        persona.per_esta_activo = True
+        self.db.commit()
+        return

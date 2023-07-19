@@ -60,6 +60,15 @@ def update_persona(nombre: str = Form(), apellido: str = Form(), telefono: str =
 
     return JSONResponse(status_code=200, content={"message": "Se ha modificado el campo de persona"})
 
+@persona_router.delete('/persona-act/{id}', tags=['personas'])
+def activate_persona(id: int):
+    db = Session()    
+    result = PersonaService(db).get_persona(payload['per'])
+    if not result:
+        return JSONResponse(status_code=404, content={"msg": "No encontrado"})
+    PersonaService(db).activar_cuenta(id)
+    return JSONResponse(status_code=200, content={"message": "Se ha activo la cuenta de la persona"})
+
 @persona_router.delete('/persona/{id}', tags=['personas'])
 def delete_persona(id: int, token: str = Depends(reuseable_oauth)):
     payload = validate_token(token)
