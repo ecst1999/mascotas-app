@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 from config.database import Session
 from services.persona_service import PersonaService
 from fastapi.encoders import jsonable_encoder
+from schemas.persona_schema import Persona
 from helpers.jwt import validate_token, reuseable_oauth
 
 persona_router = APIRouter()
@@ -30,19 +31,10 @@ def get_persona(id:int, token: str = Depends(reuseable_oauth)):
     return JSONResponse(status_code= 200, content= jsonable_encoder(result))
 
 @persona_router.put('/persona', tags=['personas'])
-def update_persona(nombre: str = Form(), apellido: str = Form(), telefono: str = Form(), correo: str = Form(), direccion: str = Form(), token: str = Depends(reuseable_oauth)):
+def update_persona(persona: Persona, token: str = Depends(reuseable_oauth)):
     payload = validate_token(token)
     if not payload:
-        return JSONResponse(status_code=500, content={"msg": "El token no es valido, por favor inicie sesión"})    
-
-    persona = {
-        'per_nombre': nombre,
-        'per_apellido': apellido,
-        'per_telefono': telefono,
-        'per_correo': correo,
-        'per_direccion': direccion,
-        'per_foto_documento': "path"
-        }        
+        return JSONResponse(status_code=500, content={"msg": "El token no es valido, por favor inicie sesión"})     
 
     db = Session()
     result = PersonaService(db).get_persona(payload['per'])

@@ -1,4 +1,5 @@
 from models.persona import Persona as PersonaModel
+from schemas.persona_schema import Persona
 
 
 class PersonaService():
@@ -12,16 +13,16 @@ class PersonaService():
     def get_persona(self, id):
         return self.db.query(PersonaModel).filter(PersonaModel.per_id == id, PersonaModel.per_estado == True).first()
     
-    def update_persona(self, data: dict, per: int):
+    def update_persona(self, data: Persona, per: int):
         persona = self.db.query(PersonaModel).filter(PersonaModel.per_estado == True, PersonaModel.per_id == per).first()        
         
-        persona.per_nombre = data['per_nombre']
-        persona.per_apellido = data['per_apellido']
-        persona.per_telefono = data['per_telefono']
-        persona.per_correo = data['per_correo']
+        persona.per_nombre = data.per_nombre
+        persona.per_apellido = data.per_apellido
+        persona.per_telefono = data.per_telefono
+        persona.per_correo = data.per_correo
         persona.per_completo = True
-        persona.per_direccion = data['per_direccion']   
-        persona.per_foto_documento = data['per_foto_documento']                                             
+        persona.per_direccion = data.per_direccion
+        persona.per_foto_documento = data.per_foto_documento                                            
 
         self.db.commit()
         return
