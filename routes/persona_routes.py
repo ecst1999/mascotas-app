@@ -40,6 +40,7 @@ def update_persona(persona: Persona, token: str = Depends(reuseable_oauth)):
     result = PersonaService(db).get_persona(payload['per'])
     if not result:
         return JSONResponse(status_code=404, content={"msg": "No encontrado"})
+    print(persona)
     PersonaService(db).update_persona(persona, payload['per'])
 
     return JSONResponse(status_code=200, content={"message": "Se ha modificado el campo de persona"})
