@@ -30,18 +30,10 @@ def get_persona(id:int, token: str = Depends(reuseable_oauth)):
     return JSONResponse(status_code= 200, content= jsonable_encoder(result))
 
 @persona_router.put('/persona', tags=['personas'])
-def update_persona(nombre: str = Form(), apellido: str = Form(), telefono: str = Form(), correo: str = Form(), direccion: str = Form(), foto_documento: UploadFile = File(...), token: str = Depends(reuseable_oauth)):
+def update_persona(nombre: str = Form(), apellido: str = Form(), telefono: str = Form(), correo: str = Form(), direccion: str = Form(), token: str = Depends(reuseable_oauth)):
     payload = validate_token(token)
     if not payload:
-        return JSONResponse(status_code=500, content={"msg": "El token no es valido, por favor inicie sesión"})
-    
-    pathGuardar = f"storage/documentos/{foto_documento.filename}"
-
-    try:
-        with open(pathGuardar, "wb") as buffer:
-            shutil.copyfileobj(foto_documento.file, buffer)
-    finally:
-        foto_documento.file.close()
+        return JSONResponse(status_code=500, content={"msg": "El token no es valido, por favor inicie sesión"})    
 
     persona = {
         'per_nombre': nombre,
@@ -49,7 +41,7 @@ def update_persona(nombre: str = Form(), apellido: str = Form(), telefono: str =
         'per_telefono': telefono,
         'per_correo': correo,
         'per_direccion': direccion,
-        'per_foto_documento': pathGuardar
+        'per_foto_documento': "path"
         }        
 
     db = Session()
