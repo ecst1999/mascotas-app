@@ -3,7 +3,6 @@ from pydantic import BaseModel, Field
 
 
 class Persona(BaseModel):
-    per_identificacion: str = Field(min_length=10, max_length=20)
     per_nombre: str = Field(min_length=1, max_length=100)
     per_apellido: str = Field(min_length=1, max_length=100)         
     per_telefono: str = Field(min_length=10, max_length=15)
@@ -12,8 +11,7 @@ class Persona(BaseModel):
 
     class Config:
         schema_extra = {
-            "example": {                                
-                "per_identificacion": "Identificacion",
+            "example": {                                                
                 "per_nombre": "Nombre",
                 "per_apellido": "Apellido",
                 "per_telefono": "0987654321",

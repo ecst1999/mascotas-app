@@ -22,7 +22,7 @@ class PersonaService():
         persona.per_correo = data.per_correo
         persona.per_completo = True
         persona.per_direccion = data.per_direccion
-        persona.per_foto_documento = data.per_foto_documento                                            
+        persona.per_foto_documento = "foto"                                   
 
         self.db.commit()
         return
